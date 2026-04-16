@@ -5,7 +5,7 @@
  * some elements of it
  */
 
-project pSix "Web Game"  2025-12-15 +5m {
+project pSix "Web Game"  2025-12-15 +6m {
   # Set the default time zone for the project. If not specified, UTC
   # is used.
   timezone "Europe/Paris"
@@ -16,10 +16,8 @@ project pSix "Web Game"  2025-12-15 +5m {
   # Use Eurpean financial format for currency values. Don't show cents.
   currencyformat "-" "" "." "," 2
   # Pick a day during the project that will be reported as 'today' in
-  # the project reports. If not specified, the current day will be
-  # used, but this will likely be outside of the project range, so it
-  # can't be seen in the reports.
-  now 2026-02-25-13:00
+  # the project reports.
+  now 2026-04-15-13:00
   # The currency for all money values is the US Dollar.
   currency "EUR"
 
@@ -67,6 +65,12 @@ resource dev2 "Samantha Müller" {
 }
 resource dev3 "Peter Green" {
   email "kkk@unizar.es"
+}
+
+# New resource for the student (Practice Requirement)
+resource student "Jorge (Alumno)" {
+  email "jorge@unizar.es"
+  limits { dailymax 4h }
 }
 
 # Now we specify the work packages. The whole project is described as
@@ -117,6 +121,12 @@ task WMGame "Web & Mobile Game" {
       effort 20d
       allocate dev1, dev2
       depends WMGame.tback.tlogic
+      # Incident/Annotation for today's date (Practice Requirement)
+      journalentry 2026-04-15 "Desarrollo del backend según lo previsto" {
+        author student
+        alert green
+        summary "Se han completado los módulos principales de la API."
+      }
     }
   }
 
@@ -147,14 +157,55 @@ task WMGame "Web & Mobile Game" {
     }    
   }
 
+  # New Top Level Task: Mobile Front End (Practice Requirement)
+  task tmobileF "Mobile Front End" {
+    purge chargeset
+    chargeset mFront
+    depends WMGame.tgdesign
+    task tMobDes "Mobile UI/UX Design" {
+      effort 5d
+      allocate student
+    }
+    task tMobConst "Mobile Implementation" {
+      effort 10d
+      allocate student, dev2
+      depends WMGame.tmobileF.tMobDes
+    }
+  }
+
+  # New Top Level Task: Cloud Deployment (Practice Requirement)
+  task tcloudD "Cloud Deployment Support" {
+    purge chargeset
+    chargeset back
+    depends WMGame.tback
+    task tEvalCloud "Cloud Provider Evaluation" {
+      effort 3d
+      allocate student, boss
+    }
+    task tCICD "CI/CD Pipeline Setup" {
+      effort 4d
+      allocate dev1
+      depends WMGame.tcloudD.tEvalCloud
+    }
+    task tDeploy "Environment Deployment" {
+      effort 2d
+      allocate student
+      depends WMGame.tcloudD.tCICD
+    }
+  }
+
   task ttest "Acceptance tests" {
+      # Constraint: Start at May 15th (Practice Requirement)
+      minstart 2026-05-15
       effort 10d
       allocate boss
       allocate dev2
       actual:effort 20d
       depends WMGame.twebF
       depends WMGame.tback
-      }
+      depends WMGame.tmobileF
+      depends WMGame.tcloudD
+  }
 
     
   task deliveries "Milestones" {
@@ -224,6 +275,11 @@ textreport frame "" {
     center '<[report id="overview"]>'
   }
   
+  textreport initial "InitialPlan" {
+    formats html
+    center '<[report id="initialPlan"]>'
+  }
+
   textreport "Status" {
     formats html
     center -8<-
@@ -268,6 +324,14 @@ taskreport overview "" {
   hideresource @all
   balance cost rev
   caption 'All effort values are in man days.'
+}
+
+# New Report: Initial Plan (Practice Requirement)
+taskreport initialPlan "" {
+  scenarios plan
+  headline "Initial Planning (Baseline)"
+  columns bsi { title 'WBS' }, name, start, end, effort, chart { scale day }
+  hideresource @all
 }
 
 
