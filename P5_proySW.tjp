@@ -151,7 +151,7 @@ task WMGame "Web & Mobile Game" {
       depends WMGame.twebF.tGUId
     }
     task tFEt "Web Front End Test" {
-      effort 34d
+      effort 40d
       allocate dev1
       depends WMGame.twebF.tFEc
     }    
