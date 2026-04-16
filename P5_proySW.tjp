@@ -67,9 +67,9 @@ resource dev3 "Peter Green" {
   email "kkk@unizar.es"
 }
 
-# New resource for the student (Practice Requirement)
-resource student "Jorge (Alumno)" {
-  email "jorge@unizar.es"
+# Nueva tarea
+resource student "903080)" {
+  email "903080@unizar.es"
   limits { dailymax 4h }
 }
 
@@ -121,7 +121,7 @@ task WMGame "Web & Mobile Game" {
       effort 20d
       allocate dev1, dev2
       depends WMGame.tback.tlogic
-      # Incident/Annotation for today's date (Practice Requirement)
+      # Anotacion para hoy
       journalentry 2026-04-15 "Desarrollo del backend según lo previsto" {
         author student
         alert green
@@ -151,13 +151,13 @@ task WMGame "Web & Mobile Game" {
       depends WMGame.twebF.tGUId
     }
     task tFEt "Web Front End Test" {
-      effort 6d
+      effort 83d
       allocate dev1
       depends WMGame.twebF.tFEc
     }    
   }
 
-  # New Top Level Task: Mobile Front End (Practice Requirement)
+  # Nueva tarea
   task tmobileF "Mobile Front End" {
     purge chargeset
     chargeset mFront
@@ -173,7 +173,7 @@ task WMGame "Web & Mobile Game" {
     }
   }
 
-  # New Top Level Task: Cloud Deployment (Practice Requirement)
+  # Nueva tarea
   task tcloudD "Cloud Deployment Support" {
     purge chargeset
     chargeset back
@@ -195,7 +195,7 @@ task WMGame "Web & Mobile Game" {
   }
 
   task ttest "Acceptance tests" {
-      # Constraint: Start at May 15th (Practice Requirement)
+      # Fecha de comienzo
       minstart 2026-05-15
       effort 10d
       allocate boss
@@ -326,7 +326,7 @@ taskreport overview "" {
   caption 'All effort values are in man days.'
 }
 
-# New Report: Initial Plan (Practice Requirement)
+# Plan inicial 
 taskreport initialPlan "" {
   scenarios plan
   headline "Initial Planning (Baseline)"
